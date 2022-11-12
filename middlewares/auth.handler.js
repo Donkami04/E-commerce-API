@@ -12,7 +12,6 @@ function checkApiKey(req, res, next) {
 
 function checkRoles(...roles) {
   return (req, res, next) => {
-    console.log(req.user)
     const user = req.user;
     if (roles.includes(user.role)){
       next();
@@ -20,6 +19,9 @@ function checkRoles(...roles) {
       next(boom.unauthorized());
     }
   }
-}
+};
 
-module.exports = { checkApiKey, checkRoles };
+function checkOwner(token){
+  
+}
+module.exports = { checkApiKey, checkRoles, checkOwner };

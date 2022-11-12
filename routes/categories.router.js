@@ -66,8 +66,8 @@ router.patch('/:id',
 );
 
 router.delete('/:id',
-  // passport.authenticate('jwt', {session: false}),
-  // checkRoles('admin'),
+  passport.authenticate('jwt', {session: false}),
+  checkRoles('admin'),
   validatorHandler(getCategorySchema, 'params'),
   async (req, res, next) => {
     try {

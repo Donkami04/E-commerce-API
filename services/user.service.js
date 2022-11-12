@@ -6,15 +6,28 @@ const { models } = require('./../libs/sequelize');
 class UserService {
   constructor() {}
 
-  async create(data) {
+  async createUser(data) {
       const hash = await bcrypt.hash(data.password, 10);
       const newUser = await models.User.create({
         ...data,
         password: hash,
       });
+      if(newUser.role === 'admin'){
+        boom.unauthorized();
+      }
     delete newUser.dataValues.password; //Esto evita retornar al usuario el password
     return newUser;
   }
+
+  async createAdmin(data) {
+    const hash = await bcrypt.hash(data.password, 10);
+    const newAdmin = await models.User.create({
+      ...data,
+      password: hash,
+    });
+  delete newAdmin.dataValues.password; //
+  return newAdmin;
+}
 
   async find() {
     const users = await models.User.findAll({
