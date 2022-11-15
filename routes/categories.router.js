@@ -1,5 +1,6 @@
 const express = require('express');
 const passport = require('passport');
+const  boom  = require('@hapi/boom');
 
 const CategoryService = require('./../services/category.service');
 const validatorHandler = require('./../middlewares/validator.handler');
@@ -20,12 +21,14 @@ router.get('/',
 });
 
 router.get('/:id',
-  // passport.authenticate('jwt', {session: false}),
   validatorHandler(getCategorySchema, 'params'),
   async (req, res, next) => {
     try {
       const { id } = req.params;
       const category = await service.findOne(id);
+      if(!category) {
+        throw boom.notFound('The category does not exist')
+      }
       res.json(category);
     } catch (error) {
       next(error);
@@ -41,7 +44,7 @@ router.post('/',
     try {
       const body = req.body;
       const newCategory = await service.create(body);
-      res.status(201).json(newCategory);
+      res.json(newCategory);
     } catch (error) {
       next(error);
     }
@@ -73,7 +76,7 @@ router.delete('/:id',
     try {
       const { id } = req.params;
       await service.delete(id);
-      res.status(201).json({id});
+      res.json({id});
     } catch (error) {
       next(error);
     }

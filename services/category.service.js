@@ -13,7 +13,6 @@ class CategoryService {
 
   async find() {
     const categories = await models.Category.findAll();
-    console.log(categories.dataValues.id);
     return categories;
   }
 
@@ -21,18 +20,23 @@ class CategoryService {
     const category = await models.Category.findByPk(id, {
       include: ['products']
     });
+
     return category;
   }
 
   async update(id, changes) {
+    const category = await this.findOne(id);
+    const newCategory = await category.update(changes);
     return {
       id,
-      changes,
-    };
+      newCategory,
+    }
   }
 
   async delete(id) {
-    return { id };
+    const category = await this.findOne(id);
+    await category.destroy();
+    return { id, message: 'The Category was deleted' };
   }
 
 }

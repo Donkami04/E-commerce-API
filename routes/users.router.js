@@ -1,10 +1,9 @@
 const express = require('express');
 const passport = require('passport');
 const {checkRoles} = require('./../middlewares/auth.handler');
-const jwt = require('jsonwebtoken')
+const boom = require('@hapi/boom');
 
 const UserService = require('./../services/user.service');
-const {checkOwner} = require('./../middlewares/auth.handler');
 const validatorHandler = require('./../middlewares/validator.handler');
 const { updateUserSchema, createUserSchema, getUserSchema } = require('./../schemas/user.schema');
 
@@ -73,15 +72,12 @@ router.patch('/:id',
     try {
       const { id } = req.params;
       const body = req.body;
-      if(+req.user.sub === +req.params.id){
+      if(+req.user.sub === +id && body.role !== 'admin') {
         const user = await service.update(id, body);
         res.json(user);
-
       } else {
-        throw new Error('diferentes ID');
+        throw boom.unauthorized();
       }
-
-
     } catch (error) {
       next(error);
     }
@@ -89,12 +85,17 @@ router.patch('/:id',
 );
 
 router.delete('/:id',
+  passport.authenticate('jwt', {session: false}),
   validatorHandler(getUserSchema, 'params'),
   async (req, res, next) => {
     try {
       const { id } = req.params;
+      if(+req.user.sub === +id) {
       await service.delete(id);
       res.status(201).json({id});
+      } else {
+        throw boom.unauthorized();
+      }
     } catch (error) {
       next(error);
     }

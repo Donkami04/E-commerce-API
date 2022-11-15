@@ -12,6 +12,5 @@ const JwtStrategy = new Strategy(options, (payload, done) => {
   return done(null, payload)
 });
 
-console.log(options.jwtFromRequest)
 
 module.exports = JwtStrategy;

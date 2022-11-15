@@ -16,8 +16,6 @@ router.post('/login',
     try {
       const user = req.user;
       const rta = await service.signToken(user);
-      console.log(user.id);
-      // jwt.verify(rta.token, config.jwtSecret, {subject: user.id});
       res.json(rta)
     } catch (error) {
       next(error);

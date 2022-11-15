@@ -21,7 +21,4 @@ function checkRoles(...roles) {
   }
 };
 
-function checkOwner(token){
-  
-}
-module.exports = { checkApiKey, checkRoles, checkOwner };
+module.exports = { checkApiKey, checkRoles };
