@@ -28,21 +28,23 @@ class CustomerService {
         password: hash
       }
     }
-    const newCustomer = await models.Customer.create(newData);
+    const newCustomer = await models.Customer.create(newData, {
+      include:['user']
+    });
     delete newCustomer.user.dataValues.password;
     return newCustomer;
   }
 
   async update(id, changes) {
-    const model = await this.findOne(id);
-    const rta = await model.update(changes);
+    const customerU = await this.findOne(id);
+    const rta = await customerU.update(changes);
     return rta;
   }
 
   async delete(id) {
-    const model = await this.findOne(id);
-    await model.destroy();
-    return { rta: true };
+    const customer = await this.findOne(id);
+    await customer.destroy();
+    return { message: 'The customer was deleted' };
   }
 
 }

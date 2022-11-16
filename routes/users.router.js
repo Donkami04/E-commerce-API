@@ -11,23 +11,33 @@ const router = express.Router();
 const service = new UserService();
 
 //Get users
-router.get('/', async (req, res, next) => {
-  try {
-    const users = await service.find();
-    res.json(users);
-  } catch (error) {
-    next(error);
-  }
+router.get('/',
+  passport.authenticate('jwt', {session: false}),
+  checkRoles('admin'),
+  async (req, res, next) => {
+    try {
+      const users = await service.find();
+      res.json(users);
+    } catch (error) {
+      next(error);
+    }
 });
 
 //Get One User
 router.get('/:id',
+  passport.authenticate('jwt', {session: false}),
   validatorHandler(getUserSchema, 'params'),
+  checkRoles('customer', 'admin'),
+
   async (req, res, next) => {
     try {
       const { id } = req.params;
-      const user = await service.findOne(id);
-      res.json(user);
+      if(+req.user.sub === +id || req.user.role === 'admin'){
+        const user = await service.findOne(id);
+        res.json(user);
+      } else {
+        throw boom.unauthorized()
+      }
     } catch (error) {
       next(error);
     }
