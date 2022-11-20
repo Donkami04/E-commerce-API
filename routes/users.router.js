@@ -100,7 +100,7 @@ router.delete('/:id',
   async (req, res, next) => {
     try {
       const { id } = req.params;
-      if(+req.user.sub === +id) {
+      if(+req.user.sub === +id || req.user.role === 'admin') {
       await service.delete(id);
       res.status(201).json({id});
       } else {

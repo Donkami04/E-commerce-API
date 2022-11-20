@@ -17,8 +17,9 @@ class OrderService {
     return newItem;
   }
 
-  async find() {
-    return [];
+  async findAll() {
+    const orders = await models.Order.findAll();
+    return orders;
   }
 
   async findOne(id) {

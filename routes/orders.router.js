@@ -25,6 +25,20 @@ router.get(
   }
 );
 
+router.get(
+  '/',
+  passport.authenticate('jwt', {session: false}),
+  checkRoles('admin'),
+  async (req, res, next) => {
+    try {
+        const order = await service.findAll();
+        res.json(order);
+    } catch (error) {
+      next(error);
+    }
+  }
+);
+
 router.post('/',
   passport.authenticate('jwt', {session: false}),
   validatorHandler(createOrderSchema, 'body'),
