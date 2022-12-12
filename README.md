@@ -1,9 +1,9 @@
 
 # API REST - E-commerce
 
-This API was mainly built in Node.JS with the Express framework. The main goal of this API is to create customers, users, products, categories and orders. It has different middleware for data validation, authentication and authorization layers.  For the database was used docker technology in a Postgres container. The responsibilities were distributed by services, routes, schemas and models. The following were the main dependencies used to build the API: jsonwebtoken, passport, bcrypt, sequelize, cors, express, dotenv, joi, boom, mysql12. 
+This API was mainly built in Node.JS with the Express framework. The main goal of this API is to create customers, users, products, categories and orders. It has different middleware for data validation, authentication and authorization layers.  For the database was used docker technology in a Postgres container. The API was made following the SOLID principles
 
-In general for all REST tools GET was used to obtain general information and with the `id` parameter specific information. POST was used to create new elements, PATCH and DELETE to edit or delete a specific element with the `id` parameter  
+In general for all REST tools GET was used to obtain general information, with the `id` parameter get specific information. POST was used to create new elements, PATCH and DELETE to edit or delete a specific element with the `id` parameter  
 
 ## API Reference
 
